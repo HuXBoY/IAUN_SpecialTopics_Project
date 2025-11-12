@@ -4,9 +4,10 @@ import accounts
 
 
 def main():
+    accounts.init_accounts()
     while 1:
         action = input(
-            "\n" * 15 +
+            "\n" * 25 +
             f"{Fore.MAGENTA}==={Fore.RESET} Banking operations menu {Fore.MAGENTA}==={Fore.RESET}\n"
             "1. Show balance of all accounts\n"
             "2. Deposit into account\n"
@@ -17,21 +18,29 @@ def main():
 
         if action == "1":
             print(
-                "\n" * 15 + Fore.YELLOW +
+                "\n" * 25 + Fore.YELLOW +
                 "Showing balance of all accounts . . .\n" + Style.RESET_ALL)
             act1()
             act_end()
 
         elif action == "2":
+            print(
+                "\n" * 25 + Fore.YELLOW +
+                "Depositing into account . . .\n" + Style.RESET_ALL)
             act2()
-            print("Depositing into account . . .")
             act_end()
 
         elif action == "3":
+            print(
+                "\n" * 25 + Fore.YELLOW +
+                "Withdrawing from account . . .\n" + Style.RESET_ALL)
             act3()
             act_end()
 
         elif action == "4":
+            print(
+                "\n" * 25 + Fore.YELLOW +
+                f"Showing balance of all accounts highter than average : {accounts.get_avg_balance()} . . .\n" + Style.RESET_ALL)
             act4()
             act_end()
 
@@ -44,20 +53,51 @@ def main():
 
 
 def act1():
-    for i in accounts.account_balance:
-        print(Fore.MAGENTA + "->" + Fore.RESET, i)
+    for i in range(len(accounts.account_owner)):
+        print(
+            Fore.MAGENTA + accounts.account_owner[i],
+            "->" + Fore.RESET, accounts.account_balance[i])
 
 
 def act2():
-    pass
+    print("Which account to deposit into ?\n")
+    for i in range(len(accounts.account_owner)):
+        print(i+1, "->", accounts.account_owner[i])
+    depo_to_acc = int(input("-> "))
+    for i in range(len(accounts.account_owner)):
+        if depo_to_acc == i+1:
+            amount = int(input("How much to deposit? "))
+            accounts.account_balance[i] += amount
+            print(
+                "\n" * 25 +
+                f"Deposited {amount}\n"
+                f"Your current balance is: {accounts.account_balance[i]}")
 
 
 def act3():
-    pass
+    print("Which account to withdraw from ?\n")
+    for i in range(len(accounts.account_owner)):
+        print(i+1, "->", accounts.account_owner[i])
+    depo_to_acc = int(input("-> "))
+    for i in range(len(accounts.account_owner)):
+        if depo_to_acc == i+1:
+            amount = int(input("How much to deposit? "))
+            if amount > accounts.account_balance[i]:
+                print(f"{Fore.BLACK}{Back.RED}Not enough balance!{Style.RESET_ALL}")
+            else:
+                accounts.account_balance[i] -= amount
+                print(
+                    "\n" * 25 +
+                    f"Withdrew {amount}\n"
+                    f"Your current balance is: {accounts.account_balance[i]}")
 
 
 def act4():
-    pass
+    avg = accounts.get_avg_balance()
+    for i in range(len(accounts.account_balance)):
+        if accounts.account_balance[i] >= avg:
+            print(
+                f"{Fore.MAGENTA} {accounts.account_owner[i]} -> {Style.RESET_ALL} {accounts.account_balance[i]}")
 
 
 def act_end():
